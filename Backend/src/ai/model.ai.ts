@@ -12,7 +12,7 @@ export const geminiModel = new ChatGoogle({
 
 export const mistralAIModel = new ChatMistralAI({
     model: "mistral-medium-latest",
-    apiKey: config.MISTRALAI_API_KEY,
+    apiKey: config.MISTRAL_API_KEY,
 })
 
 
