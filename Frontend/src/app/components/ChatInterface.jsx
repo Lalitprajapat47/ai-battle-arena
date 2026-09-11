@@ -1,22 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import UserMessage from './UserMessage';
 import ArenaResponse from './ArenaResponse';
-import axios from "axios";
-
-const MOCK_RESPONSE = {
-  solution_1: "Here is a clean Python solution using modern syntax:\n\n```python\ndef fib(n):\n    a, b = 0, 1\n    for _ in range(n):\n        a, b = b, a + b\n    return a\n```\n\nThis approach has O(n) time complexity and O(1) space.",
-  solution_2: "A recursive solution can be elegant but less efficient:\n\n```python\ndef fib(n):\n    if n <= 1:\n        return n\n    return fib(n-1) + fib(n-2)\n```\n\nNote: this has O(2^n) time complexity.",
-  judge: {
-    solution_1_score: 10,
-    solution_2_score: 5,
-    solution_1_reasoning: "Excellent, optimal solution. Space complexity is O(1) which is perfect for this problem.",
-    solution_2_reasoning: "The recursive approach without memoization is extremely slow for large inputs."
-  }
-};
+import axios from 'axios';
 
 export default function ChatInterface() {
-  const [ messages, setMessages ] = useState([]);
-  const [ inputValue, setInputValue ] = useState('');
+  const [messages, setMessages] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+  const [loading, setLoading] = useState(false);
   const endOfMessagesRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -25,49 +15,72 @@ export default function ChatInterface() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [ messages ]);
+  }, [messages, loading]);
 
   const handleSend = async (e) => {
     e.preventDefault();
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim() || loading) return;
 
-    const response = await axios.post("http://localhost:3000/invoke", {
-      input: inputValue
-    })
-
-    const data = response.data
-
-    console.log(data)
-
-
-    const newMessage = {
-      id: Date.now(),
-      problem: inputValue,
-      // simulate the delay or instantly add dummy response
-      ...data.result
-    };
-
-    setMessages([ ...messages, newMessage ]);
+    const currentPrompt = inputValue.trim();
     setInputValue('');
+    setLoading(true);
+
+    try {
+      const response = await axios.post("http://localhost:3000/invoke", {
+        input: currentPrompt
+      });
+
+      const data = response.data;
+
+      const newMessage = {
+        id: Date.now(),
+        problem: currentPrompt,
+        ...(data.result || data)
+      };
+
+      setMessages((prev) => [...prev, newMessage]);
+    } catch (err) {
+      console.error("Battle invocation failed:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="flex flex-col h-screen bg-zinc-50 dark:bg-zinc-950 font-sans">
-      <header className="py-4 px-8 border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md sticky top-0 z-10 flex justify-center">
-        <h1 className="text-xl font-medium tracking-tight text-zinc-900 dark:text-zinc-50">AI Chat Arena</h1>
+    <div className="flex flex-col h-screen bg-[#040507] text-zinc-100 font-sans selection:bg-cyan-500/20 selection:text-cyan-300">
+      
+      {/* Sleek Minimal Header */}
+      <header className="h-14 border-b border-zinc-800/80 bg-[#040507]/80 backdrop-blur-md sticky top-0 z-20 flex items-center justify-between px-6">
+        <div className="flex items-center gap-2.5">
+          <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
+          <span className="font-mono text-xs uppercase tracking-widest text-zinc-400">
+            Arena Engine <span className="text-zinc-600">v1.0</span>
+          </span>
+        </div>
+        <div className="flex items-center gap-3 text-xs font-mono text-zinc-500">
+          <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span> Alpha</span>
+          <span>vs</span>
+          <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Beta</span>
+        </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto px-4 md:px-8 py-8 w-full max-w-6xl mx-auto flex flex-col">
-        {messages.length === 0 ? (
-          <div className="flex-1 flex items-center justify-center text-zinc-400">
-            <div className="text-center">
-              <h2 className="text-2xl font-light mb-2 text-zinc-600 dark:text-zinc-300">Welcome to the Arena</h2>
-              <p>Type a problem below to see two AI solutions go head-to-head.</p>
+      {/* Main Conversation Stream */}
+      <main className="flex-1 overflow-y-auto px-4 md:px-6 py-6 w-full max-w-6xl mx-auto flex flex-col">
+        {messages.length === 0 && !loading ? (
+          <div className="flex-1 flex flex-col items-center justify-center text-center my-auto">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-800 bg-zinc-900/50 text-xs font-mono text-zinc-400 mb-4">
+              Side-by-side LLM benchmark
             </div>
+            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-zinc-100 mb-2">
+              Compare AI Architectures
+            </h2>
+            <p className="text-zinc-400 text-sm max-w-md">
+              Send a code generation, optimization, or logic task to benchmark responses in real time.
+            </p>
           </div>
         ) : (
           messages.map((msg) => (
-            <div key={msg.id} className="mb-12 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
+            <div key={msg.id} className="mb-10 w-full animate-in fade-in duration-300">
               <UserMessage message={msg.problem} />
               <ArenaResponse
                 solution1={msg.solution_1}
@@ -77,31 +90,49 @@ export default function ChatInterface() {
             </div>
           ))
         )}
+
+        {/* Dynamic Loading State */}
+        {loading && (
+          <div className="my-6 p-6 rounded-2xl border border-zinc-800/80 bg-[#090b10]/60 flex items-center justify-center gap-3">
+            <div className="w-4 h-4 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-xs font-mono text-zinc-400 tracking-wider uppercase">
+              Generating parallel solutions & scoring verdict...
+            </span>
+          </div>
+        )}
+
         <div ref={endOfMessagesRef} />
       </main>
 
-      <div className="p-6 bg-white dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800">
+      {/* Bottom Floating Console Input */}
+      <div className="p-4 md:p-6 bg-gradient-to-t from-[#040507] via-[#040507]/90 to-transparent sticky bottom-0">
         <div className="max-w-4xl mx-auto">
-          <form onSubmit={handleSend} className="relative flex items-center">
+          <form
+            onSubmit={handleSend}
+            className="relative flex items-center rounded-2xl bg-[#0b0e14] border border-zinc-800 focus-within:border-cyan-500/50 focus-within:ring-1 focus-within:ring-cyan-500/40 transition-all p-1.5 shadow-2xl"
+          >
             <input
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
-              placeholder="Ask a coding question..."
-              className="w-full bg-zinc-100 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 border-none rounded-full py-4 pl-6 pr-16 focus:ring-2 focus:ring-blue-500 focus:outline-none placeholder-zinc-400 transition-shadow shadow-sm hover:shadow-md text-lg"
+              disabled={loading}
+              placeholder="Enter benchmark prompt (e.g. Write LRU Cache with O(1) ops)..."
+              className="w-full bg-transparent px-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 outline-none font-sans"
             />
             <button
               type="submit"
-              className="absolute right-2 bg-blue-600 hover:bg-blue-700 text-white p-2.5 rounded-full transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!inputValue.trim()}
+              disabled={!inputValue.trim() || loading}
+              className="px-4 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-semibold text-xs transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1.5 cursor-pointer"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                <path d="M3.478 2.404a.75.75 0 00-.926.941l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.404z" />
+              <span>Execute</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+                <path d="M3.105 2.289a.75.75 0 00-.826.95l1.414 4.925H9a.75.75 0 010 1.5H3.693l-1.414 4.924a.75.75 0 00.826.95 28.896 28.896 0 0015.293-7.154.75.75 0 000-1.115A28.897 28.897 0 003.105 2.289z" />
               </svg>
             </button>
           </form>
         </div>
       </div>
+
     </div>
   );
 }
