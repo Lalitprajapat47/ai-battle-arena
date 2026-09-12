@@ -52,7 +52,7 @@ export default function ChatInterface() {
 
   return (
     <div className="relative min-h-screen bg-[#0d0d11] text-zinc-100 font-sans selection:bg-orange-500/20 selection:text-orange-300 flex flex-col overflow-x-hidden">
-      
+
       {/* Background Layers */}
       <div className="fixed inset-0 arena-grid-bg pointer-events-none opacity-40 z-0"></div>
       <div className="fixed inset-0 arena-hero-glow pointer-events-none z-0"></div>
@@ -86,15 +86,15 @@ export default function ChatInterface() {
 
       {/* Main Execution Arena Area */}
       <main className="relative z-10 flex-1 flex flex-col items-center w-full max-w-6xl mx-auto px-4 pb-32">
-        
+
         {messages.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center text-center mt-12 md:mt-16 mb-12">
-            
+
             {/* Exact Figma Inspired Hero Heading */}
             <h1 className="text-4xl sm:text-6xl md:text-7xl font-light tracking-tight text-white max-w-3xl leading-[1.12]">
-              Power <span className="serif-accent">AI models</span><br />
+              Battle <span className="serif-accent">AI models</span><br />
               Head-to-Head.<br />
-              It’s Open Source
+              Judged by AI
             </h1>
 
             <p className="mt-6 text-zinc-400 text-sm sm:text-base max-w-lg font-light leading-relaxed">
