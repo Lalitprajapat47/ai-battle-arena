@@ -26,7 +26,6 @@ export default function ChatInterface() {
     setLoading(true);
 
     try {
-      // LangGraph Backend invocation
       const response = await axios.post("http://localhost:3000/invoke", {
         input: currentPrompt
       });
@@ -51,69 +50,76 @@ export default function ChatInterface() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#0d0d11] text-zinc-100 font-sans selection:bg-orange-500/20 selection:text-orange-300 flex flex-col overflow-x-hidden">
+    <div className="relative min-h-screen bg-[#050910] text-zinc-100 font-sans selection:bg-[#00f5d4]/20 selection:text-[#00f5d4] flex flex-col overflow-x-hidden">
+      
+      {/* Background Ambience */}
+      <div className="fixed inset-0 dink-grid pointer-events-none opacity-60 z-0"></div>
+      <div className="fixed inset-0 dink-aura pointer-events-none z-0"></div>
 
-      {/* Background Layers */}
-      <div className="fixed inset-0 arena-grid-bg pointer-events-none opacity-40 z-0"></div>
-      <div className="fixed inset-0 arena-hero-glow pointer-events-none z-0"></div>
-
-      {/* Arena Navigation Header */}
-      <header className="relative z-20 w-full max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+      {/* Header */}
+      <header className="relative z-20 w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-2.5 h-2.5 rounded-full bg-orange-500 shadow-[0_0_10px_#ff8543] animate-pulse"></div>
-          <span className="text-base font-semibold tracking-wide text-white">LangGraph Battle Arena</span>
-          <span className="hidden sm:inline-block text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded-md bg-orange-500/10 text-orange-400 border border-orange-500/25">
-            Graph Active
-          </span>
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#0fe3b8] to-[#00b4d8] flex items-center justify-center shadow-[0_0_15px_rgba(0,245,212,0.4)]">
+            <span className="text-[#050910] font-black text-sm">✦</span>
+          </div>
+          <div>
+            <h2 className="text-base font-bold tracking-tight text-white flex items-center gap-2">
+              LangGraph Arena <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-full bg-[#00f5d4]/10 text-[#00f5d4] border border-[#00f5d4]/30">v1.0</span>
+            </h2>
+          </div>
         </div>
 
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 bg-zinc-900/60 border border-zinc-800 px-3 py-1.5 rounded-xl backdrop-blur-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-            <span>Parallel Nodes</span>
+          <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-zinc-400 bg-[#08121f]/80 border border-zinc-800/90 px-3.5 py-1.5 rounded-full backdrop-blur-md">
+            <span className="w-2 h-2 rounded-full bg-[#00f5d4] animate-pulse"></span>
+            <span>Graph Nodes Ready</span>
           </div>
 
           {messages.length > 0 && (
             <button
               onClick={() => setMessages([])}
-              className="px-3 py-1.5 text-xs font-medium text-zinc-400 hover:text-white bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 rounded-xl transition-all cursor-pointer backdrop-blur-sm"
+              className="px-4 py-1.5 text-xs font-medium text-zinc-400 hover:text-white bg-[#0a1424] hover:bg-[#0f1d33] border border-zinc-800 rounded-full transition-all cursor-pointer backdrop-blur-md"
             >
-              Reset Arena
+              Clear Feed
             </button>
           )}
         </div>
       </header>
 
-      {/* Main Execution Arena Area */}
-      <main className="relative z-10 flex-1 flex flex-col items-center w-full max-w-6xl mx-auto px-4 pb-32">
-
+      {/* Hero & Content Arena */}
+      <main className="relative z-10 flex-1 flex flex-col items-center w-full max-w-6xl mx-auto px-4 pb-36">
+        
         {messages.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-center mt-12 md:mt-16 mb-12">
+          <div className="flex-1 flex flex-col items-center justify-center text-center mt-14 md:mt-20 mb-12">
+            
+            {/* Top Glowing Tag */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#00f5d4]/10 border border-[#00f5d4]/25 text-[#00f5d4] text-xs font-mono mb-6 backdrop-blur-md">
+              <span>✦</span> Dual Intelligence Comparison
+            </div>
 
-            {/* Exact Figma Inspired Hero Heading */}
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-light tracking-tight text-white max-w-3xl leading-[1.12]">
-              Battle <span className="serif-accent">AI models</span><br />
-              Head-to-Head.<br />
-              Judged by AI
+            {/* Video-Style Hero Headline */}
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white max-w-3xl leading-[1.12]">
+              Next-Gen <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00f5d4] to-[#38bdf8]">AI Chatbot</span><br />
+              Battle Arena
             </h1>
 
-            <p className="mt-6 text-zinc-400 text-sm sm:text-base max-w-lg font-light leading-relaxed">
-              Parallel execution over LangGraph workflow with autonomous LLM evaluation.
+            <p className="mt-6 text-zinc-400 text-sm sm:text-base max-w-lg font-normal leading-relaxed">
+              Synthesizing and benchmarking multi-model reasoning directly through LangGraph orchestration.
             </p>
 
-            {/* Model Benchmark Pillars */}
-            <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4 mt-16 max-w-3xl border-t border-zinc-800/60 pt-8">
-              <div className="p-4 rounded-xl border border-zinc-800/80 bg-zinc-950/40 backdrop-blur-sm text-center">
-                <p className="text-[11px] font-mono uppercase tracking-widest text-zinc-500">Node Alpha</p>
-                <h4 className="text-sm font-semibold text-zinc-200 mt-1">Mistral AI</h4>
+            {/* Floating Model Stacked Badges */}
+            <div className="flex items-center justify-center gap-3.5 mt-14 flex-wrap max-w-2xl">
+              <div className="px-5 py-2.5 rounded-2xl border border-[#00f5d4]/25 bg-[#0a1424]/70 backdrop-blur-md text-xs font-mono text-zinc-300 flex items-center gap-2 shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00f5d4]"></span>
+                Mistral Large
               </div>
-              <div className="p-4 rounded-xl border border-zinc-800/80 bg-zinc-950/40 backdrop-blur-sm text-center">
-                <p className="text-[11px] font-mono uppercase tracking-widest text-zinc-500">Node Beta</p>
-                <h4 className="text-sm font-semibold text-zinc-200 mt-1">Gemini 1.5 Pro</h4>
+              <div className="px-5 py-2.5 rounded-2xl border border-sky-500/25 bg-[#0a1424]/70 backdrop-blur-md text-xs font-mono text-zinc-300 flex items-center gap-2 shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
+                <span className="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+                Gemini 1.5 Pro
               </div>
-              <div className="p-4 rounded-xl border border-zinc-800/80 bg-zinc-950/40 backdrop-blur-sm text-center">
-                <p className="text-[11px] font-mono uppercase tracking-widest text-zinc-500">Judge Node</p>
-                <h4 className="text-sm font-semibold text-zinc-200 mt-1">Evaluator LLM</h4>
+              <div className="px-5 py-2.5 rounded-2xl border border-purple-500/25 bg-[#0a1424]/70 backdrop-blur-md text-xs font-mono text-zinc-300 flex items-center gap-2 shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
+                Automated Judge
               </div>
             </div>
 
@@ -134,12 +140,12 @@ export default function ChatInterface() {
           </div>
         )}
 
-        {/* Loading Indicator */}
+        {/* Loading Glow Box */}
         {loading && (
-          <div className="my-8 p-5 rounded-2xl border border-orange-500/30 bg-zinc-950/80 backdrop-blur-md flex items-center gap-3 shadow-xl">
-            <div className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-            <span className="text-xs font-mono text-orange-200 tracking-wider">
-              Executing LangGraph nodes & awaiting Judge decision...
+          <div className="my-8 px-6 py-4 rounded-2xl border border-[#00f5d4]/40 bg-[#071322]/80 backdrop-blur-md flex items-center gap-3 shadow-[0_0_25px_rgba(0,245,212,0.15)]">
+            <div className="w-4 h-4 border-2 border-[#00f5d4] border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-xs font-mono text-[#00f5d4] tracking-wider">
+              Querying LangGraph parallel nodes...
             </span>
           </div>
         )}
@@ -147,30 +153,37 @@ export default function ChatInterface() {
         <div ref={endOfMessagesRef} />
       </main>
 
-      {/* Floating Bottom Console */}
-      <div className="fixed bottom-6 inset-x-0 z-30 px-4">
+      {/* Video-Style Pill Capsule Floating Bar */}
+      <div className="fixed bottom-7 inset-x-0 z-30 px-4">
         <div className="max-w-3xl mx-auto">
           <form
             onSubmit={handleSend}
-            className="flex items-center gap-3 rounded-2xl bg-zinc-950/90 border border-zinc-800/90 shadow-[0_8px_32px_rgba(0,0,0,0.6)] backdrop-blur-xl p-2.5 focus-within:border-orange-500/60 transition-all"
+            className="flex items-center rounded-full bg-[#08121f]/90 neon-border-cyan backdrop-blur-xl p-2 transition-all shadow-[0_10px_35px_rgba(0,0,0,0.8)]"
           >
+            {/* Search Icon */}
+            <div className="pl-4 pr-2 text-zinc-400">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+
             <input
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               disabled={loading}
-              placeholder="Ask a coding problem (e.g., Write an LRU Cache in TypeScript)..."
-              className="flex-1 bg-transparent px-4 py-2 text-sm text-white placeholder-zinc-500 outline-none font-sans"
+              placeholder="Search docs or ask a coding problem..."
+              className="flex-1 bg-transparent px-2 py-3 text-sm text-white placeholder-zinc-500 outline-none font-sans"
             />
+
+            {/* Video-Style "Ask AI" Pill Button */}
             <button
               type="submit"
               disabled={!inputValue.trim() || loading}
-              className="px-5 py-2.5 bg-orange-500 hover:bg-orange-400 disabled:opacity-30 disabled:cursor-not-allowed text-zinc-950 font-semibold text-xs rounded-xl transition-all flex items-center gap-2 cursor-pointer font-mono uppercase tracking-wider"
+              className="neon-btn-glow hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed text-[#050910] font-bold text-xs px-5 py-2.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer font-sans tracking-wide"
             >
-              <span>Invoke</span>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5">
-                <path fillRule="evenodd" d="M2 8a.75.75 0 0 1 .75-.75h8.69L8.22 4.03a.75.75 0 0 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06-1.06l3.22-3.22H2.75A.75.75 0 0 1 2 8Z" clipRule="evenodd" />
-              </svg>
+              <span>✦</span>
+              <span>Ask AI</span>
             </button>
           </form>
         </div>
