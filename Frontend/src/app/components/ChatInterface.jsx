@@ -31,7 +31,6 @@ export default function ChatInterface() {
       });
 
       const data = response.data;
-
       const newMessage = {
         id: Date.now(),
         problem: currentPrompt,
@@ -40,63 +39,93 @@ export default function ChatInterface() {
 
       setMessages((prev) => [...prev, newMessage]);
     } catch (err) {
-      console.error("Battle invocation failed:", err);
+      console.error("Invocation error:", err);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col h-screen bg-[#040507] text-zinc-100 font-sans selection:bg-cyan-500/20 selection:text-cyan-300">
+    <div className="relative min-h-screen bg-[#0d0d0f] text-zinc-100 font-sans selection:bg-orange-500/20 selection:text-orange-300 flex flex-col overflow-x-hidden">
       
-      {/* Sleek Minimal Header */}
-      <header className="h-14 border-b border-zinc-800/80 bg-[#040507]/80 backdrop-blur-md sticky top-0 z-20 flex items-center justify-between px-6">
-        <div className="flex items-center gap-2.5">
-          <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
-          <span className="font-mono text-xs uppercase tracking-widest text-zinc-400">
-            Arena Engine <span className="text-zinc-600">v1.0</span>
-          </span>
+      {/* Background Grid Pattern & Ambient Radial Glow */}
+      <div className="fixed inset-0 bg-grid-pattern pointer-events-none opacity-40 z-0"></div>
+      <div className="fixed inset-0 hero-glow pointer-events-none z-0"></div>
+
+      {/* Floating Minimal Navbar */}
+      <header className="relative z-20 w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="text-lg font-medium tracking-tight text-white">AgentFlow</span>
         </div>
-        <div className="flex items-center gap-3 text-xs font-mono text-zinc-500">
-          <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span> Alpha</span>
-          <span>vs</span>
-          <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Beta</span>
+
+        <nav className="hidden md:flex items-center gap-7 text-xs font-normal text-zinc-400">
+          <a href="#features" className="hover:text-zinc-200 transition-colors">Products ▾</a>
+          <a href="#pricing" className="hover:text-zinc-200 transition-colors">Pricing</a>
+          <a href="#docs" className="hover:text-zinc-200 transition-colors">Docs</a>
+          <a href="#models" className="hover:text-zinc-200 transition-colors">Models ▾</a>
+        </nav>
+
+        <div>
+          <button className="px-4 py-1.5 text-xs font-medium text-zinc-300 bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700/60 rounded-lg transition-all backdrop-blur-sm cursor-pointer">
+            Sign up
+          </button>
         </div>
       </header>
 
-      {/* Main Conversation Stream */}
-      <main className="flex-1 overflow-y-auto px-4 md:px-6 py-6 w-full max-w-6xl mx-auto flex flex-col">
-        {messages.length === 0 && !loading ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-center my-auto">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-800 bg-zinc-900/50 text-xs font-mono text-zinc-400 mb-4">
-              Side-by-side LLM benchmark
-            </div>
-            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight text-zinc-100 mb-2">
-              Compare AI Architectures
-            </h2>
-            <p className="text-zinc-400 text-sm max-w-md">
-              Send a code generation, optimization, or logic task to benchmark responses in real time.
+      {/* Hero Section & Conversation Area */}
+      <main className="relative z-10 flex-1 flex flex-col items-center w-full max-w-6xl mx-auto px-4 pb-28">
+        
+        {messages.length === 0 ? (
+          <div className="flex-1 flex flex-col items-center justify-center text-center mt-12 md:mt-16 mb-12">
+            
+            {/* Main Hero Header */}
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-light tracking-tight text-white max-w-3xl leading-[1.12]">
+              Power <span className="font-serif-glow">AI apps</span><br />
+              with Clean Data.<br />
+              It’s Open Source
+            </h1>
+
+            {/* Subtitle / Description */}
+            <p className="mt-6 text-zinc-400 text-sm sm:text-base max-w-lg font-light leading-relaxed">
+              Side-by-side multi-model reasoning and automated execution benchmark.
             </p>
+
+            {/* Bottom Grid Showcase Cards */}
+            <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4 mt-20 max-w-4xl border-t border-zinc-800/60 pt-8">
+              <div className="p-4 rounded-xl border border-zinc-800/80 bg-zinc-950/40 backdrop-blur-sm text-center">
+                <p className="text-xs font-mono uppercase tracking-wider text-zinc-400">Mistral Large</p>
+              </div>
+              <div className="p-4 rounded-xl border border-zinc-800/80 bg-zinc-950/40 backdrop-blur-sm text-center">
+                <p className="text-xs font-mono uppercase tracking-wider text-zinc-400">Gemini Pro</p>
+              </div>
+              <div className="p-4 rounded-xl border border-zinc-800/80 bg-zinc-950/40 backdrop-blur-sm text-center">
+                <p className="text-xs font-mono uppercase tracking-wider text-zinc-400">Cohere Command</p>
+              </div>
+            </div>
+
           </div>
         ) : (
-          messages.map((msg) => (
-            <div key={msg.id} className="mb-10 w-full animate-in fade-in duration-300">
-              <UserMessage message={msg.problem} />
-              <ArenaResponse
-                solution1={msg.solution_1}
-                solution2={msg.solution_2}
-                judge={msg.judge}
-              />
-            </div>
-          ))
+          /* Response Feed */
+          <div className="w-full mt-6 space-y-10">
+            {messages.map((msg) => (
+              <div key={msg.id} className="w-full">
+                <UserMessage message={msg.problem} />
+                <ArenaResponse
+                  solution1={msg.solution_1}
+                  solution2={msg.solution_2}
+                  judge={msg.judge}
+                />
+              </div>
+            ))}
+          </div>
         )}
 
-        {/* Dynamic Loading State */}
+        {/* Loading Indicator */}
         {loading && (
-          <div className="my-6 p-6 rounded-2xl border border-zinc-800/80 bg-[#090b10]/60 flex items-center justify-center gap-3">
-            <div className="w-4 h-4 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
-            <span className="text-xs font-mono text-zinc-400 tracking-wider uppercase">
-              Generating parallel solutions & scoring verdict...
+          <div className="my-6 p-4 rounded-xl border border-orange-500/30 bg-zinc-950/60 backdrop-blur-md flex items-center gap-3">
+            <div className="w-4 h-4 border-2 border-orange-400 border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-xs font-mono text-orange-200 tracking-wider">
+              Evaluating models and streaming response...
             </span>
           </div>
         )}
@@ -104,29 +133,29 @@ export default function ChatInterface() {
         <div ref={endOfMessagesRef} />
       </main>
 
-      {/* Bottom Floating Console Input */}
-      <div className="p-4 md:p-6 bg-gradient-to-t from-[#040507] via-[#040507]/90 to-transparent sticky bottom-0">
-        <div className="max-w-4xl mx-auto">
+      {/* Floating Center Input Console */}
+      <div className="fixed bottom-6 inset-x-0 z-30 px-4">
+        <div className="max-w-2xl mx-auto">
           <form
             onSubmit={handleSend}
-            className="relative flex items-center rounded-2xl bg-[#0b0e14] border border-zinc-800 focus-within:border-cyan-500/50 focus-within:ring-1 focus-within:ring-cyan-500/40 transition-all p-1.5 shadow-2xl"
+            className="flex items-center gap-2 rounded-2xl bg-zinc-950/80 border border-zinc-800/90 shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl p-2 focus-within:border-orange-500/50 transition-all"
           >
             <input
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               disabled={loading}
-              placeholder="Enter benchmark prompt (e.g. Write LRU Cache with O(1) ops)..."
-              className="w-full bg-transparent px-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 outline-none font-sans"
+              placeholder="Ask a coding question or enter problem..."
+              className="flex-1 bg-transparent px-4 py-2 text-sm text-white placeholder-zinc-500 outline-none"
             />
             <button
               type="submit"
               disabled={!inputValue.trim() || loading}
-              className="px-4 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-semibold text-xs transition-all disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1.5 cursor-pointer"
+              className="px-4 py-2 bg-orange-500 hover:bg-orange-400 disabled:opacity-30 disabled:cursor-not-allowed text-zinc-950 font-semibold text-xs rounded-xl transition-all flex items-center gap-1.5 cursor-pointer"
             >
-              <span>Execute</span>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
-                <path d="M3.105 2.289a.75.75 0 00-.826.95l1.414 4.925H9a.75.75 0 010 1.5H3.693l-1.414 4.924a.75.75 0 00.826.95 28.896 28.896 0 0015.293-7.154.75.75 0 000-1.115A28.897 28.897 0 003.105 2.289z" />
+              <span>Run</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5">
+                <path fillRule="evenodd" d="M2 8a.75.75 0 0 1 .75-.75h8.69L8.22 4.03a.75.75 0 0 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06-1.06l3.22-3.22H2.75A.75.75 0 0 1 2 8Z" clipRule="evenodd" />
               </svg>
             </button>
           </form>
