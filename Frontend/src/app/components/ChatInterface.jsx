@@ -48,27 +48,33 @@ export default function ChatInterface() {
   return (
     <div className="relative min-h-screen bg-[#0d0d0f] text-zinc-100 font-sans selection:bg-orange-500/20 selection:text-orange-300 flex flex-col overflow-x-hidden">
       
-      {/* Background Grid Pattern & Ambient Radial Glow */}
+      {/* Background Grid Pattern & Ambient Glow */}
       <div className="fixed inset-0 bg-grid-pattern pointer-events-none opacity-40 z-0"></div>
       <div className="fixed inset-0 hero-glow pointer-events-none z-0"></div>
 
-      {/* Floating Minimal Navbar */}
-      <header className="relative z-20 w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="text-lg font-medium tracking-tight text-white">AgentFlow</span>
+      {/* AI Battle Arena Navigation Bar */}
+      <header className="relative z-20 w-full max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <span className="text-lg font-semibold tracking-tight text-white">AI Battle Arena</span>
+          <span className="text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/20">
+            Live Benchmark
+          </span>
         </div>
 
-        <nav className="hidden md:flex items-center gap-7 text-xs font-normal text-zinc-400">
-          <a href="#features" className="hover:text-zinc-200 transition-colors">Products ▾</a>
-          <a href="#pricing" className="hover:text-zinc-200 transition-colors">Pricing</a>
-          <a href="#docs" className="hover:text-zinc-200 transition-colors">Docs</a>
-          <a href="#models" className="hover:text-zinc-200 transition-colors">Models ▾</a>
-        </nav>
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-zinc-400 bg-zinc-900/60 border border-zinc-800 px-3 py-1.5 rounded-xl backdrop-blur-sm">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Parallel Reasoning</span>
+          </div>
 
-        <div>
-          <button className="px-4 py-1.5 text-xs font-medium text-zinc-300 bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700/60 rounded-lg transition-all backdrop-blur-sm cursor-pointer">
-            Sign up
-          </button>
+          {messages.length > 0 && (
+            <button
+              onClick={() => setMessages([])}
+              className="px-3.5 py-1.5 text-xs font-medium text-zinc-400 hover:text-white bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800 rounded-xl transition-all cursor-pointer backdrop-blur-sm"
+            >
+              Clear Feed
+            </button>
+          )}
         </div>
       </header>
 
@@ -76,7 +82,7 @@ export default function ChatInterface() {
       <main className="relative z-10 flex-1 flex flex-col items-center w-full max-w-6xl mx-auto px-4 pb-28">
         
         {messages.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-center mt-12 md:mt-16 mb-12">
+          <div className="flex-1 flex flex-col items-center justify-center text-center mt-14 md:mt-18 mb-12">
             
             {/* Main Hero Header */}
             <h1 className="text-4xl sm:text-6xl md:text-7xl font-light tracking-tight text-white max-w-3xl leading-[1.12]">
@@ -85,27 +91,27 @@ export default function ChatInterface() {
               It’s Open Source
             </h1>
 
-            {/* Subtitle / Description */}
+            {/* Subtitle */}
             <p className="mt-6 text-zinc-400 text-sm sm:text-base max-w-lg font-light leading-relaxed">
               Side-by-side multi-model reasoning and automated execution benchmark.
             </p>
 
-            {/* Bottom Grid Showcase Cards */}
-            <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-4 mt-20 max-w-4xl border-t border-zinc-800/60 pt-8">
-              <div className="p-4 rounded-xl border border-zinc-800/80 bg-zinc-950/40 backdrop-blur-sm text-center">
-                <p className="text-xs font-mono uppercase tracking-wider text-zinc-400">Mistral Large</p>
-              </div>
-              <div className="p-4 rounded-xl border border-zinc-800/80 bg-zinc-950/40 backdrop-blur-sm text-center">
-                <p className="text-xs font-mono uppercase tracking-wider text-zinc-400">Gemini Pro</p>
-              </div>
-              <div className="p-4 rounded-xl border border-zinc-800/80 bg-zinc-950/40 backdrop-blur-sm text-center">
-                <p className="text-xs font-mono uppercase tracking-wider text-zinc-400">Cohere Command</p>
-              </div>
+            {/* Supported Models Badges */}
+            <div className="flex items-center justify-center gap-3 mt-16 max-w-xl flex-wrap">
+              <span className="px-4 py-2 rounded-xl border border-zinc-800/80 bg-zinc-950/40 backdrop-blur-sm text-xs font-mono tracking-wider text-zinc-400">
+                MISTRAL LARGE
+              </span>
+              <span className="px-4 py-2 rounded-xl border border-zinc-800/80 bg-zinc-950/40 backdrop-blur-sm text-xs font-mono tracking-wider text-zinc-400">
+                GEMINI PRO
+              </span>
+              <span className="px-4 py-2 rounded-xl border border-zinc-800/80 bg-zinc-950/40 backdrop-blur-sm text-xs font-mono tracking-wider text-zinc-400">
+                COHERE COMMAND
+              </span>
             </div>
 
           </div>
         ) : (
-          /* Response Feed */
+          /* Response Stream */
           <div className="w-full mt-6 space-y-10">
             {messages.map((msg) => (
               <div key={msg.id} className="w-full">
