@@ -114,32 +114,74 @@ export default function ChatInterface() {
 
   return (
     <div className="relative min-h-screen bg-[#020408] text-white flex flex-col selection:bg-white/20 selection:text-white overflow-x-hidden">
-      
+
       {/* Halftone Canvas & Ambient Vignette */}
       <canvas ref={canvasRef} className="miracle-canvas" />
       <div className="matrix-vignette" />
 
       {/* Luxury Minimal Header */}
+      {/* Precision Industrial Luxury Header (Matching Reference Image) */}
+      {/* Luxury Minimal Header */}
       <header className="relative z-30 w-full max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5">
-            <span className="text-xl font-bold tracking-tight text-white font-sans lowercase">miracle</span>
-            <span className="text-white text-base">✦</span>
+
+        {/* Summit-Style Miracle Logo Lockup */}
+        <div className="flex items-center gap-4 group cursor-pointer">
+          {/* Left: Monogram Icon + Brand Name */}
+          <div className="flex flex-col items-center">
+            <svg
+              className="w-9 h-7 text-white drop-shadow-[0_2px_8px_rgba(255,255,255,0.25)] transition-transform duration-300 group-hover:scale-105"
+              viewBox="0 0 100 80"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M38 6 L8 74 H32 L56 22 H86 C91 22 94 25 94 30 V74 H72 L82 50 H62 L48 74 H96 C98 74 100 72 100 70 V28 C100 16 91 6 78 6 H38 Z"
+                fill="url(#metallicGradient)"
+              />
+              <path
+                d="M58 26 L40 70 H49 L67 26 H58 Z"
+                fill="white"
+                opacity="0.9"
+              />
+              <defs>
+                <linearGradient id="metallicGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#f8fafc" />
+                  <stop offset="50%" stopColor="#94a3b8" />
+                  <stop offset="100%" stopColor="#cbd5e1" />
+                </linearGradient>
+              </defs>
+            </svg>
+
+            <span className="text-[9px] font-mono tracking-[0.28em] font-extrabold text-slate-300 uppercase mt-1">
+              MIRACLE
+            </span>
+          </div>
+
+          {/* Hairline Divider */}
+          <div className="h-9 w-[1px] bg-gradient-to-b from-transparent via-white/25 to-transparent"></div>
+
+          {/* Right: Stacked Elegant Tagline */}
+          <div className="flex flex-col justify-center leading-[1.05]">
+            <span className="text-[13px] font-light italic tracking-tight text-slate-300">
+              Premier
+            </span>
+            <span className="text-[13px] font-light tracking-tight text-slate-400">
+              Combat
+            </span>
+            <span className="text-[13px] font-light tracking-tight text-slate-400">
+              Arena
+            </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 text-[11px] font-mono text-slate-300 bg-white/[0.04] border border-white/10 px-3.5 py-1.5 rounded-full backdrop-blur-md">
-            <span className="h-1.5 w-1.5 rounded-full bg-white animate-ping" />
-            <span>Dual Agent Arena</span>
-          </div>
-
+        {/* Right Side: Completely Clean (Only reveals 'Clear' during an active session) */}
+        <div>
           {messages.length > 0 && (
             <button
               onClick={() => setMessages([])}
-              className="text-xs text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 px-3 py-1 rounded-full transition-all cursor-pointer backdrop-blur-md"
+              className="text-xs text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 px-3.5 py-1.5 rounded-full transition-all cursor-pointer backdrop-blur-md"
             >
-              Clear
+              Clear Session
             </button>
           )}
         </div>
@@ -147,10 +189,10 @@ export default function ChatInterface() {
 
       {/* Main Container */}
       <main className="relative z-20 flex-1 flex flex-col items-center w-full max-w-4xl mx-auto px-4 pb-36">
-        
+
         {messages.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center text-center mt-14 md:mt-24 mb-10 w-full">
-            
+
             {/* Center Brand Title */}
             <div className="flex items-center justify-center gap-2.5 mb-5">
               <h1 className="text-6xl sm:text-8xl font-bold tracking-tight text-white lowercase">
