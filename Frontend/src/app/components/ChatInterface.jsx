@@ -3,10 +3,13 @@ import UserMessage from './UserMessage';
 import ArenaResponse from './ArenaResponse';
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export default function ChatInterface() {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const canvasRef = useRef(null);
   const endOfMessagesRef = useRef(null);
 
@@ -86,9 +89,10 @@ export default function ChatInterface() {
     const currentPrompt = inputValue.trim();
     setInputValue('');
     setLoading(true);
+    setError(null);
 
     try {
-      const response = await axios.post("http://localhost:3000/invoke", {
+      const response = await axios.post(`${API_URL}/invoke`, {
         input: currentPrompt
       });
 
@@ -107,6 +111,7 @@ export default function ChatInterface() {
       setMessages((prev) => [...prev, newMessage]);
     } catch (err) {
       console.error("Invocation error:", err);
+      setError("Kuch gadbad ho gayi — backend se response nahi mila. Dobara try karo.");
     } finally {
       setLoading(false);
     }
@@ -119,8 +124,6 @@ export default function ChatInterface() {
       <canvas ref={canvasRef} className="miracle-canvas" />
       <div className="matrix-vignette" />
 
-      {/* Luxury Minimal Header */}
-      {/* Precision Industrial Luxury Header (Matching Reference Image) */}
       {/* Luxury Minimal Header */}
       <header className="relative z-30 w-full max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
 
@@ -274,6 +277,13 @@ export default function ChatInterface() {
                 />
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Error Banner */}
+        {error && (
+          <div className="my-4 rounded-2xl border border-red-500/30 bg-red-500/10 px-5 py-3 text-xs sm:text-sm text-red-300">
+            {error}
           </div>
         )}
 
