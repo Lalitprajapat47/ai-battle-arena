@@ -5,18 +5,15 @@ import cors from "cors"
 const app = express();
 app.use(express.json())
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
     methods: ["GET", "POST"],
     credentials: true,
 }))
 
 
-// app.get('/', async (req, res) => {
-
-//     const result = await runGraph("Write an code for Factorial function in js")
-
-//     res.json(result)
-// })
+app.get('/', (req, res) => {
+    res.json({ status: "ok", message: "AI Battle Arena backend is running" })
+})
 
 app.post("/invoke", async (req, res) => {
 
