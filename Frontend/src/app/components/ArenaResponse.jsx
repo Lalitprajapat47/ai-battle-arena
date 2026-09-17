@@ -154,7 +154,7 @@ export default function ArenaResponse({ solution1, solution2, judge }) {
 
             <div className="bg-white/[0.02] p-3.5 rounded-xl border border-white/5">
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-medium text-slate-300">Gemini Score</span>
+                <span className="text-xs font-medium text-slate-300">Nemotron Score</span>
                 <span className="text-sm font-bold font-mono text-white">{judge.solution_2_score}<span className="text-slate-500 text-xs">/10</span></span>
               </div>
               <p className="text-xs text-slate-400 leading-relaxed">{judge.solution_2_reasoning}</p>
