@@ -276,6 +276,7 @@ export default function ChatInterface() {
                   solution1={msg.solution_1}
                   solution2={msg.solution_2}
                   judge={msg.judge}
+                  judgeModel={msg.judgeModel}
                 />
               </div>
             ))}
