@@ -31,7 +31,7 @@ function CodeBlock({ className, children, ...props }) {
   );
 }
 
-export default function ArenaResponse({ solution1, solution2, judge }) {
+export default function ArenaResponse({ solution1, solution2, judge, judgeModel }) {
   const [copiedId, setCopiedId] = useState(null);
 
   useEffect(() => {
@@ -68,11 +68,10 @@ export default function ArenaResponse({ solution1, solution2, judge }) {
   return (
     <div className="flex flex-col gap-4 w-full">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        
+
         {/* Solution 1 */}
-        <div className={`flex flex-col rounded-2xl p-5 transition-all ${
-          isSol1Winner ? 'miracle-card-winner' : 'miracle-card'
-        }`}>
+        <div className={`flex flex-col rounded-2xl p-5 transition-all ${isSol1Winner ? 'miracle-card-winner' : 'miracle-card'
+          }`}>
           <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
             <div className="flex items-center gap-2">
               <span className={`h-2 w-2 rounded-full ${isSol1Winner ? 'bg-white shadow-[0_0_8px_#fff]' : 'bg-slate-500'}`} />
@@ -101,9 +100,8 @@ export default function ArenaResponse({ solution1, solution2, judge }) {
         </div>
 
         {/* Solution 2 */}
-        <div className={`flex flex-col rounded-2xl p-5 transition-all ${
-          isSol2Winner ? 'miracle-card-winner' : 'miracle-card'
-        }`}>
+        <div className={`flex flex-col rounded-2xl p-5 transition-all ${isSol2Winner ? 'miracle-card-winner' : 'miracle-card'
+          }`}>
           <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
             <div className="flex items-center gap-2">
               <span className={`h-2 w-2 rounded-full ${isSol2Winner ? 'bg-white shadow-[0_0_8px_#fff]' : 'bg-slate-500'}`} />
