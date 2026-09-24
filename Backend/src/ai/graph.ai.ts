@@ -63,6 +63,7 @@ const judgeNode: GraphNode<typeof state> = async (state) => {
     const { problem, solution_1, solution_2 } = state
 
     let result;
+    let judgeModel = "Nemotron 3 Ultra";
 
     try {
         // Primary judge: Nemotron
@@ -70,6 +71,7 @@ const judgeNode: GraphNode<typeof state> = async (state) => {
     } catch (nemotronError) {
         console.error("Nemotron judge failed, falling back to Gemini:", nemotronError)
         // Fallback judge: Gemini
+        judgeModel = "Gemini (fallback)"
         result = await runJudge(geminiModel, problem, solution_1, solution_2)
     }
 
@@ -81,6 +83,7 @@ const judgeNode: GraphNode<typeof state> = async (state) => {
     } = result
 
     return {
+        judge_model: judgeModel,
         judge: {
             solution_1_score,
             solution_2_score,
@@ -90,6 +93,8 @@ const judgeNode: GraphNode<typeof state> = async (state) => {
     }
 
 }
+
+
 
 const graph = new StateGraph(state)
     .addNode("solution", solutionNode)
@@ -108,3 +113,16 @@ export default async function (problem: string) {
     return result
 
 }
+
+const state = new StateSchema({
+    problem: z.string().default(""),
+    solution_1: z.string().default(""),
+    solution_2: z.string().default(""),
+    judge_model: z.string().default(""),
+    judge: z.object({
+        solution_1_score: z.number().default(0),
+        solution_2_score: z.number().default(0),
+        solution_1_reasoning: z.string().default(""),
+        solution_2_reasoning: z.string().default(""),
+    })
+})
