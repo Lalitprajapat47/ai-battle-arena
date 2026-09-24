@@ -108,7 +108,7 @@ export default function ArenaResponse({ solution1, solution2, judge }) {
             <div className="flex items-center gap-2">
               <span className={`h-2 w-2 rounded-full ${isSol2Winner ? 'bg-white shadow-[0_0_8px_#fff]' : 'bg-slate-500'}`} />
               <span className="text-xs font-mono font-semibold text-white tracking-wide">
-                Gemini Pro (Beta)
+                Cohere Command A
               </span>
               {isSol2Winner && (
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/15 text-white border border-white/30">
