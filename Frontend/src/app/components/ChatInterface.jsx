@@ -102,6 +102,8 @@ export default function ChatInterface() {
       const newMessage = {
         id: Date.now(),
         problem: currentPrompt,
+        judge: resultData.judge,
+        judgeModel: resultData.judge_model,
         solution_1: resultData.solution_1 || resultData.solution1,
         solution_2: resultData.solution_2 || resultData.solution2,
         judge: resultData.judge,
