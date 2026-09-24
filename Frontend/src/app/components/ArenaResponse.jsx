@@ -139,6 +139,11 @@ export default function ArenaResponse({ solution1, solution2, judge, judgeModel 
             <h4 className="text-xs font-mono font-semibold text-white tracking-wider uppercase">
               Judge Evaluation Verdict
             </h4>
+            {judgeModel && (
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-slate-300 border border-white/15">
+                {judgeModel}
+              </span>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
