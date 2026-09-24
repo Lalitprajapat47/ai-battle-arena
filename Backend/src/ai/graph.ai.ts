@@ -7,6 +7,7 @@ const state = new StateSchema({
     problem: z.string().default(""),
     solution_1: z.string().default(""),
     solution_2: z.string().default(""),
+    judge_model: z.string().default(""),
     judge: z.object({
         solution_1_score: z.number().default(0),
         solution_2_score: z.number().default(0),
@@ -95,7 +96,6 @@ const judgeNode: GraphNode<typeof state> = async (state) => {
 }
 
 
-
 const graph = new StateGraph(state)
     .addNode("solution", solutionNode)
     .addNode("judge_node", judgeNode)
@@ -113,16 +113,3 @@ export default async function (problem: string) {
     return result
 
 }
-
-const state = new StateSchema({
-    problem: z.string().default(""),
-    solution_1: z.string().default(""),
-    solution_2: z.string().default(""),
-    judge_model: z.string().default(""),
-    judge: z.object({
-        solution_1_score: z.number().default(0),
-        solution_2_score: z.number().default(0),
-        solution_1_reasoning: z.string().default(""),
-        solution_2_reasoning: z.string().default(""),
-    })
-})
