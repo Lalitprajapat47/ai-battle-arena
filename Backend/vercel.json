@@ -2,9 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
     "src/app.ts": {
-      "includeFiles": [
-        "node_modules/@langchain/langgraph/dist/**"
-      ]
+      "includeFiles": "node_modules/@langchain/langgraph/dist/**"
     }
   }
 }
