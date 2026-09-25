@@ -1,9 +1,6 @@
 {
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/api" }
-  ],
   "functions": {
-    "api/index.js": {
+    "src/app.ts": {
       "includeFiles": "node_modules/@langchain/**"
     }
   }
