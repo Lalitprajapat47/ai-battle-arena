@@ -20,8 +20,8 @@ const state = new StateSchema({
 const solutionNode: GraphNode<typeof state> = async (state) => {
 
     const [mistralResponse, cohereResponse] = await Promise.all([
-        mistralAIModel.invoke(state.problem),
-        cohereModel.invoke(state.problem)
+        mistralAIModel.invoke(state.problem as string),
+        cohereModel.invoke(state.problem as string)
     ])
 
     return {
@@ -61,55 +61,59 @@ const runJudge = async (model: typeof geminiModel | typeof nemotronModel, proble
 }
 
 const judgeNode: GraphNode<typeof state> = async (state) => {
-    const { problem, solution_1, solution_2 } = state
+        const { problem, solution_1, solution_2 } = state as {
+            problem: string
+            solution_1: string
+            solution_2: string
+        }
 
-    let result;
-    let judgeModel = "Nemotron 3 Ultra";
+        let result;
+        let judgeModel = "Nemotron 3 Ultra";
 
-    try {
-        // Primary judge: Nemotron
-        result = await runJudge(nemotronModel, problem, solution_1, solution_2)
-    } catch (nemotronError) {
-        console.error("Nemotron judge failed, falling back to Gemini:", nemotronError)
-        // Fallback judge: Gemini
-        judgeModel = "Gemini (fallback)"
-        result = await runJudge(geminiModel, problem, solution_1, solution_2)
-    }
+        try {
+            // Primary judge: Nemotron
+            result = await runJudge(nemotronModel, problem, solution_1, solution_2)
+        } catch (nemotronError) {
+            console.error("Nemotron judge failed, falling back to Gemini:", nemotronError)
+            // Fallback judge: Gemini
+            judgeModel = "Gemini (fallback)"
+            result = await runJudge(geminiModel, problem, solution_1, solution_2)
+        }
 
-    const {
-        solution_1_score,
-        solution_2_score,
-        solution_1_reasoning,
-        solution_2_reasoning
-    } = result
-
-    return {
-        judge_model: judgeModel,
-        judge: {
+        const {
             solution_1_score,
             solution_2_score,
             solution_1_reasoning,
             solution_2_reasoning
+        } = result
+
+        return {
+            judge_model: judgeModel,
+            judge: {
+                solution_1_score,
+                solution_2_score,
+                solution_1_reasoning,
+                solution_2_reasoning
+            }
         }
+
     }
 
-}
 
+    const graph = new StateGraph(state)
+        .addNode("solution", solutionNode)
+        .addNode("judge_node", judgeNode)
+        .addEdge(START, "solution")
+        .addEdge("solution", "judge_node")
+        .addEdge("judge_node", END)
+        .compile()
 
-const graph = new StateGraph(state)
-    .addNode("solution", solutionNode)
-    .addNode("judge_node", judgeNode)
-    .addEdge(START, "solution")
-    .addEdge("solution", "judge_node")
-    .addEdge("judge_node", END)
-    .compile()
+    export default async function (problem: string) {
 
-export default async function (problem: string) { 
+        const result = await graph.invoke({
+            problem: problem
+        })
 
-    const result = await graph.invoke({
-        problem: problem
-    })
+        return result
 
-    return result
-
-}
+    }
