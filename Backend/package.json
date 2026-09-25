@@ -30,5 +30,8 @@
     "express": "^5.2.1",
     "langchain": "^1.2.39",
     "zod": "^4.3.6"
+  },
+  "overrides": {
+    "@langchain/core": "^1.1.38"
   }
 }
