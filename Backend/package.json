@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx watch server.ts"
+    "dev": "tsx watch server.ts",
+    "vercel-build": "esbuild src/app.ts --bundle --platform=node --format=esm --target=node20 --outfile=api/index.js"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +15,7 @@
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^25.5.0",
+    "esbuild": "^0.24.0",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2"
   },
