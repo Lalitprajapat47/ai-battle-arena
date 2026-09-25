@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "Backend/src/app.ts": {
+      "includeFiles": "Backend/node_modules/@langchain/langgraph/dist/**"
+    }
+  }
+}
