@@ -2,7 +2,12 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
     "api/index.cjs": {
-      "includeFiles": "node_modules/@langchain/langgraph/dist/**"
+      "includeFiles": [
+        "node_modules/@langchain/langgraph/dist/**",
+        "node_modules/@langchain/core/dist/**",
+        "node_modules/@langchain/openai/dist/**",
+        "node_modules/openai/**"
+      ]
     }
   }
 }
