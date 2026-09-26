@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch server.ts",
     "postinstall": "node scripts/patch-langgraph.mjs",
-    "vercel-build": "esbuild src/app.ts --bundle --platform=node --format=cjs --target=node20 --external:express --external:cors --external:dotenv --outfile=api/index.cjs"
+    "vercel-build": "node node_modules/esbuild/bin/esbuild src/app.ts --bundle --platform=node --format=cjs --target=node20 --external:express --external:cors --external:dotenv --outfile=api/index.cjs"
   },
   "keywords": [],
   "author": "",
