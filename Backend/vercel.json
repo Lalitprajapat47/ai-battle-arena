@@ -1,8 +1,5 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "functions": {
-    "server.ts": {
-      "includeFiles": "node_modules/@langchain/**"
-    }
-  }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/api" }
+  ]
 }
