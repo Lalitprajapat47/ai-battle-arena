@@ -27,6 +27,7 @@
     "@langchain/langgraph": "1.4.17",
     "@langchain/mistralai": "^1.0.7",
     "@langchain/openai": "^1.5.13",
+    "@mistralai/mistralai": "^2.7.0",
     "@types/cors": "^2.8.19",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
