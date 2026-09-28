@@ -10,5 +10,5 @@
     "strict": false,
     "resolveJsonModule": true
   },
-  "include": ["server.ts", "src/**/*.ts"]
+  "include": ["server.local.ts", "src/**/*.ts"]
 }

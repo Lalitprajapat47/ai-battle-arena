@@ -17,16 +17,17 @@ app.get('/', (req, res) => {
 })
 
 app.post("/invoke", async (req, res) => {
-
-    const { input } = req.body
-    const result = await runGraph(input)
-
-    res.status(200).json({
-        message: "Graph executed successfully",
-        success: true,
-        result
-    })
-
+    try {
+        const { input } = req.body ?? {};
+        if (!input || typeof input !== "string") {
+            return res.status(400).json({ success: false, message: "input is required" });
+        }
+        const result = await runGraph(input);
+        res.status(200).json({ message: "Graph executed successfully", success: true, result });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: "Graph execution failed" });
+    }
 })
 
 

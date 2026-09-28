@@ -1,7 +1,7 @@
 {
   "functions": {
-    "server.ts": {
-      "includeFiles": "node_modules/**"
+    "src/app.ts": {
+      "includeFiles": "node_modules/openai/lib/responses/*"
     }
   }
 }

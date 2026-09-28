@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "server.ts": {
-      "includeFiles": "node_modules/**"
-    }
-  }
-}
