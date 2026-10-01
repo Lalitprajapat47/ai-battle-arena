@@ -5,10 +5,13 @@ import cors from "cors"
 const app = express();
 app.use(express.json())
 app.use(cors({
-    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
+    origin: [
+        "http://localhost:5173",
+        "https://ai-battle-arena-mr7l.vercel.app"
+    ],
     methods: ["GET", "POST"],
     credentials: true,
-}))
+}));
 
 
 app.get('/', (req, res) => {
