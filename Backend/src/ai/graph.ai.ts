@@ -61,59 +61,59 @@ const runJudge = async (model: typeof geminiModel | typeof nemotronModel, proble
 }
 
 const judgeNode: GraphNode<typeof state> = async (state) => {
-        const { problem, solution_1, solution_2 } = state as {
-            problem: string
-            solution_1: string
-            solution_2: string
-        }
+    const { problem, solution_1, solution_2 } = state as {
+        problem: string
+        solution_1: string
+        solution_2: string
+    }
 
-        let result;
-        let judgeModel = "Nemotron 3 Ultra";
+    let result;
+    let judgeModel = "Nemotron 3 Ultra";
 
-        try {
-            // Primary judge: Nemotron
-            result = await runJudge(nemotronModel, problem, solution_1, solution_2)
-        } catch (nemotronError) {
-            console.error("Nemotron judge failed, falling back to Gemini:", nemotronError)
-            // Fallback judge: Gemini
-            judgeModel = "Gemini (fallback)"
-            result = await runJudge(geminiModel, problem, solution_1, solution_2)
-        }
+    try {
+        // Primary judge: Nemotron
+        result = await runJudge(nemotronModel, problem, solution_1, solution_2)
+    } catch (nemotronError) {
+        console.error("Nemotron judge failed, falling back to Gemini:", nemotronError)
+        // Fallback judge: Gemini
+        judgeModel = "Gemini (fallback)"
+        result = await runJudge(geminiModel, problem, solution_1, solution_2)
+    }
 
-        const {
+    const {
+        solution_1_score,
+        solution_2_score,
+        solution_1_reasoning,
+        solution_2_reasoning
+    } = result
+
+    return {
+        judge_model: judgeModel,
+        judge: {
             solution_1_score,
             solution_2_score,
             solution_1_reasoning,
             solution_2_reasoning
-        } = result
-
-        return {
-            judge_model: judgeModel,
-            judge: {
-                solution_1_score,
-                solution_2_score,
-                solution_1_reasoning,
-                solution_2_reasoning
-            }
         }
-
     }
 
+}
 
-    const graph = new StateGraph(state)
-        .addNode("solution", solutionNode)
-        .addNode("judge_node", judgeNode)
-        .addEdge(START, "solution")
-        .addEdge("solution", "judge_node")
-        .addEdge("judge_node", END)
-        .compile()
 
-    export default async function (problem: string) {
+const graph = new StateGraph(state)
+    .addNode("solution", solutionNode)
+    .addNode("judge_node", judgeNode)
+    .addEdge(START, "solution")
+    .addEdge("solution", "judge_node")
+    .addEdge("judge_node", END)
+    .compile()
 
-        const result = await graph.invoke({
-            problem: problem
-        })
+export default async function (problem: string) {
 
-        return result
+    const result = await graph.invoke({
+        problem: problem
+    })
 
-    }
+    return result
+
+}

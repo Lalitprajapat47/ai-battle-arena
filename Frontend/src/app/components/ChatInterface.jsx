@@ -106,7 +106,6 @@ export default function ChatInterface() {
         judgeModel: resultData.judge_model,
         solution_1: resultData.solution_1 || resultData.solution1,
         solution_2: resultData.solution_2 || resultData.solution2,
-        judge: resultData.judge,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
 

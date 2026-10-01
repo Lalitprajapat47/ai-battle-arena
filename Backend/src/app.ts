@@ -1,4 +1,3 @@
-// redeploy trigger
 import express from 'express';
 import runGraph from "./ai/graph.ai.js"
 import cors from "cors"
@@ -17,17 +16,33 @@ app.get('/', (req, res) => {
 })
 
 app.post("/invoke", async (req, res) => {
-    try {
-        const { input } = req.body ?? {};
-        if (!input || typeof input !== "string") {
-            return res.status(400).json({ success: false, message: "input is required" });
-        }
-        const result = await runGraph(input);
-        res.status(200).json({ message: "Graph executed successfully", success: true, result });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ success: false, message: "Graph execution failed" });
+
+    const { input } = req.body
+
+    if (!input || typeof input !== "string" || !input.trim()) {
+        res.status(400).json({
+            message: "Missing or invalid 'input' in request body",
+            success: false
+        })
+        return
     }
+
+    try {
+        const result = await runGraph(input)
+
+        res.status(200).json({
+            message: "Graph executed successfully",
+            success: true,
+            result
+        })
+    } catch (error) {
+        console.error("Error running graph:", error)
+        res.status(500).json({
+            message: "Something went wrong while generating a response. Please try again.",
+            success: false
+        })
+    }
+
 })
 
 
