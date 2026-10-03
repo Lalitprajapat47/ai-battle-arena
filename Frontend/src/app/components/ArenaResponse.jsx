@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import hljs from 'highlight.js';
@@ -8,18 +8,12 @@ import 'highlight.js/styles/atom-one-dark.css';
 // length but is capped so long responses don't take forever to finish.
 function useTypewriter(text) {
   const [displayed, setDisplayed] = useState('');
-  const prevTextRef = useRef('');
 
   useEffect(() => {
     if (!text) {
       setDisplayed('');
-      prevTextRef.current = '';
       return;
     }
-
-    // If the text hasn't actually changed (e.g. parent re-render), don't restart.
-    if (text === prevTextRef.current) return;
-    prevTextRef.current = text;
 
     setDisplayed('');
     const total = text.length;
