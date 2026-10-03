@@ -1,8 +1,53 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
+
+// Reveals text progressively like a typewriter. Duration scales gently with
+// length but is capped so long responses don't take forever to finish.
+function useTypewriter(text) {
+  const [displayed, setDisplayed] = useState('');
+  const prevTextRef = useRef('');
+
+  useEffect(() => {
+    if (!text) {
+      setDisplayed('');
+      prevTextRef.current = '';
+      return;
+    }
+
+    // If the text hasn't actually changed (e.g. parent re-render), don't restart.
+    if (text === prevTextRef.current) return;
+    prevTextRef.current = text;
+
+    setDisplayed('');
+    const total = text.length;
+    const duration = Math.min(2200, Math.max(500, total * 3.5)); // ms
+    const steps = Math.max(1, Math.round(duration / 16)); // ~60fps
+    const chunk = Math.max(1, Math.ceil(total / steps));
+
+    let i = 0;
+    const id = setInterval(() => {
+      i += chunk;
+      setDisplayed(text.slice(0, i));
+      if (i >= total) {
+        clearInterval(id);
+      }
+    }, 16);
+
+    return () => clearInterval(id);
+  }, [text]);
+
+  const isTyping = text && displayed.length < text.length;
+  return [displayed, isTyping];
+}
+
+function TypingCursor() {
+  return (
+    <span className="inline-block w-[2px] h-[1em] align-middle bg-white/80 ml-0.5 animate-pulse" />
+  );
+}
 
 function CodeBlock({ className, children, ...props }) {
   const [copied, setCopied] = useState(false);
@@ -34,9 +79,14 @@ function CodeBlock({ className, children, ...props }) {
 export default function ArenaResponse({ solution1, solution2, judge, judgeModel }) {
   const [copiedId, setCopiedId] = useState(null);
 
+  const [sol1Display, sol1Typing] = useTypewriter(solution1);
+  const [sol2Display, sol2Typing] = useTypewriter(solution2);
+  const [reasoning1Display, reasoning1Typing] = useTypewriter(judge?.solution_1_reasoning || '');
+  const [reasoning2Display, reasoning2Typing] = useTypewriter(judge?.solution_2_reasoning || '');
+
   useEffect(() => {
     hljs.highlightAll();
-  }, [solution1, solution2]);
+  }, [sol1Display, sol2Display]);
 
   const copyText = async (text, id) => {
     await navigator.clipboard.writeText(text);
@@ -94,8 +144,9 @@ export default function ArenaResponse({ solution1, solution2, judge, judgeModel 
 
           <div className="flex-1 overflow-x-auto text-slate-300">
             <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-              {solution1}
+              {sol1Display}
             </ReactMarkdown>
+            {sol1Typing && <TypingCursor />}
           </div>
         </div>
 
@@ -124,8 +175,9 @@ export default function ArenaResponse({ solution1, solution2, judge, judgeModel 
 
           <div className="flex-1 overflow-x-auto text-slate-300">
             <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-              {solution2}
+              {sol2Display}
             </ReactMarkdown>
+            {sol2Typing && <TypingCursor />}
           </div>
         </div>
 
@@ -152,7 +204,10 @@ export default function ArenaResponse({ solution1, solution2, judge, judgeModel 
                 <span className="text-xs font-medium text-slate-300">Mistral Score</span>
                 <span className="text-sm font-bold font-mono text-white">{judge.solution_1_score}<span className="text-slate-500 text-xs">/10</span></span>
               </div>
-              <p className="text-xs text-slate-400 leading-relaxed">{judge.solution_1_reasoning}</p>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                {reasoning1Display}
+                {reasoning1Typing && <TypingCursor />}
+              </p>
             </div>
 
             <div className="bg-white/[0.02] p-3.5 rounded-xl border border-white/5">
@@ -160,7 +215,10 @@ export default function ArenaResponse({ solution1, solution2, judge, judgeModel 
                 <span className="text-xs font-medium text-slate-300">Cohere Score</span>
                 <span className="text-sm font-bold font-mono text-white">{judge.solution_2_score}<span className="text-slate-500 text-xs">/10</span></span>
               </div>
-              <p className="text-xs text-slate-400 leading-relaxed">{judge.solution_2_reasoning}</p>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                {reasoning2Display}
+                {reasoning2Typing && <TypingCursor />}
+              </p>
             </div>
           </div>
         </div>
