@@ -110,9 +110,14 @@ export default function ChatInterface() {
       };
 
       setMessages((prev) => [...prev, newMessage]);
-    } catch (err) {
+    }catch (err) {
       console.error("Invocation error:", err);
-      setError("Kuch gadbad ho gayi — backend se response nahi mila. Dobara try karo.");
+      const message =
+        err?.response?.data?.message ||
+        (err?.request
+          ? "The server is taking too long to respond. It may be waking up, please try again in a moment."
+          : "Something went wrong. Please try again.");
+      setError(message);
     } finally {
       setLoading(false);
     }
