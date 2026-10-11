@@ -110,7 +110,7 @@ export default function ChatInterface() {
       };
 
       setMessages((prev) => [...prev, newMessage]);
-    }catch (err) {
+    } catch (err) {
       console.error("Invocation error:", err);
       const message =
         err?.response?.data?.message ||
@@ -247,7 +247,7 @@ export default function ChatInterface() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-2xl">
               <div className="miracle-card p-3.5 rounded-2xl flex items-center justify-between text-left">
                 <div>
-                  <p className="text-xs font-bold text-white">Mistral Node</p>
+                  <p className="text-xs font-bold text-white">Mistral Medium</p>
                   <p className="text-[11px] text-slate-400">Engine Stream A</p>
                 </div>
                 <span className="text-[11px] font-mono text-white">✦ Ready</span>
@@ -255,7 +255,7 @@ export default function ChatInterface() {
 
               <div className="miracle-card p-3.5 rounded-2xl flex items-center justify-between text-left">
                 <div>
-                  <p className="text-xs font-bold text-white">Gemini Pro</p>
+                  <p className="text-xs font-bold text-white">Cohere Command A</p>
                   <p className="text-[11px] text-slate-400">Engine Stream B</p>
                 </div>
                 <span className="text-[11px] font-mono text-white">✦ Ready</span>
@@ -264,7 +264,7 @@ export default function ChatInterface() {
               <div className="miracle-card p-3.5 rounded-2xl flex items-center justify-between text-left">
                 <div>
                   <p className="text-xs font-bold text-white">Autonomous Judge</p>
-                  <p className="text-[11px] text-slate-400">Scored Arbitration</p>
+                  <p className="text-[11px] text-slate-400">Nemotron 3 Ultra</p>
                 </div>
                 <span className="text-[11px] font-mono text-slate-400">Active</span>
               </div>
