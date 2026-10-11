@@ -98,8 +98,12 @@ export default function ArenaResponse({ solution1, solution2, judge, judgeModel 
     p: ({ node, ...props }) => <p className="mb-2.5 leading-relaxed text-slate-300 text-xs sm:text-sm font-normal" {...props} />,
     ul: ({ node, ...props }) => <ul className="list-disc pl-4 mb-2.5 text-slate-300 space-y-1 text-xs sm:text-sm" {...props} />,
     ol: ({ node, ...props }) => <ol className="list-decimal pl-4 mb-2.5 text-slate-300 space-y-1 text-xs sm:text-sm" {...props} />,
-    code: ({ node, inline, className, children, ...props }) => {
-      return !inline ? (
+    // react-markdown v9+ no longer passes `inline`, so detect block code ourselves.
+    // The default <pre> wrapper is dropped because CodeBlock renders its own.
+    pre: ({ children }) => <>{children}</>,
+    code: ({ node, className, children, ...props }) => {
+      const isBlock = /language-/.test(className || '') || String(children).includes('\n');
+      return isBlock ? (
         <CodeBlock className={className} {...props}>{children}</CodeBlock>
       ) : (
         <code className="bg-white/10 text-white px-1.5 py-0.5 rounded text-[11px] font-mono border border-white/15" {...props}>
@@ -120,7 +124,7 @@ export default function ArenaResponse({ solution1, solution2, judge, judgeModel 
             <div className="flex items-center gap-2">
               <span className={`h-2 w-2 rounded-full ${isSol1Winner ? 'bg-white shadow-[0_0_8px_#fff]' : 'bg-slate-500'}`} />
               <span className="text-xs font-mono font-semibold text-white tracking-wide">
-                Mistral Large (Alpha)
+                Mistral Medium
               </span>
               {isSol1Winner && (
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/15 text-white border border-white/30">
